@@ -1,0 +1,107 @@
+import sys
+import pandas as pd
+import numpy as np
+import os
+
+from pmdarima import auto_arima
+from statsmodels.tsa.arima.model import ARIMA
+#print(__name__)
+
+
+
+
+def vector_velocities(dataset):
+    X_series_vel =
+    Y_series_vel =
+    Z_series_vel =
+    time_series_vel =
+    trace_series_vel =
+    
+
+def main():
+    print('=======================================================')
+    start = int(sys.argv[2])
+    print(f'AUTOATIMA [start]: {sys.argv[2]}')
+    
+    end = int(sys.argv[3])
+    print(f'AUTOATIMA [end]: {sys.argv[3]}')
+    
+    dataset = pd.read_excel(sys.argv[1])
+    print(f'AUTOATIMA [dataset]: {sys.argv[1]}')
+    
+    #dataset.rolling(2).apply(lambda n: (np.array(n))[1] - (np.array(n))[0])
+    
+    X_series = dataset['X']
+    print(f'AUTOATIMA [X_series]: {X_series.tail()}')
+    
+    Y_series = dataset['Y']
+    print(f'AUTOATIMA [Y_series]: {Y_series.tail()}')
+    
+    Z_series = dataset['Z']
+    print(f'AUTOATIMA [Z_series]: {Z_series.tail()}')
+    
+    time = (dataset['time'])[start:end]
+    print(f'AUTOATIMA [time]: {time.tail()}')
+    
+    trace = (dataset['trace'])[start:end]
+    print(f'AUTOATIMA [trace]: {trace.tail()}')
+
+
+    model = ARIMA(X_series, order=(2,1,0))
+    #model = ARIMA(X_series)
+    X_series_pred = model.fit().predict(start=start, end=end)
+    print(f'AUTOATIMA [X_series_pred]: {X_series_pred.tail()}')
+
+    model = ARIMA(Y_series, order=(2,1,0))
+    #model = ARIMA(Y_series)
+    Y_series_pred = model.fit().predict(start=start, end=end)
+    print(f'AUTOATIMA [Y_series_pred]: {Y_series_pred.tail()}')
+    
+    model = ARIMA(Z_series, order=(2,1,0))
+    #model = ARIMA(Z_series)
+    Z_series_pred = model.fit().predict(start=start, end=end)
+    print(f'AUTOATIMA [Z_series_pred]: {Z_series_pred.tail()}')
+    
+    model = ARIMA(dataset['time'], order=(2,1,0))
+    time_pred = model.fit().predict(start=start, end=end)
+    time_pred = time_pred.apply(lambda x: int(x))
+    print(f'AUTOATIMA [Z_series_pred]: {time_pred.tail()}')
+    
+    #model = ARIMA(dataset['trace'], order=(2,1,0))
+    #trace_pred = model.fit().predict(start=start, end=end)
+    #print(f'AUTOATIMA [Z_series_pred]: {trace_pred.tail()}')
+    
+    
+    data = {'X': X_series_pred,
+            'Y': Y_series_pred,
+            'Z': Z_series_pred,
+            'time': time_pred,
+            'trace': dataset['trace'][0]}
+
+    result_df = pd.DataFrame(data)
+    print('dataset = ', dataset.iloc[-1] )
+    print('result_df = ', result_df.iloc[0] )
+    print('dataset header = ', dataset.columns )
+    print('result_df header = ', result_df.columns )
+    #result_df.drop (index=result_df.index [0], axis= 0 , inplace= True )
+    
+    #result_df.iloc[0] = dataset.iloc[0]
+    
+    #result_df['X'][0] = dataset['X'][0]
+    #result_df['Y'][0] = dataset['Y'][0]
+    #result_df['Z'][0] = dataset['Z'][0]
+    #result_df['time'][0] = dataset['time'][0]
+    #result_df['trace'][0] = dataset['trace'][0]
+    print('here5')
+    if(os.path.exists("./models/temp_dataset.xlsx")):
+        os.remove("./models/temp_dataset.xlsx")
+    result_df.to_excel("./models/temp_dataset.xlsx")
+    print('here6')
+    #result_df = result_df.to_records(index=False)
+    #return (result_df.tostring(encoding='utf-8')).tobytes()
+    return
+    
+    
+if __name__ == '__main__':
+    print(__name__)
+    main()
