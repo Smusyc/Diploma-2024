@@ -6,7 +6,6 @@ from fancyimpute import IterativeSVD
 from sklearn.metrics import mean_squared_error
 
 def rolling_window(a, window, intersection=False):
-    # result = torch.zeros(size=(a.shape[0],a.shape[1]))
     returns = []
     if intersection:
         for i in range(0, a.shape[0]-window):
@@ -28,8 +27,6 @@ class TimeSeriesPreparing:
                 new_np_trajectory.append(result_df[i])
             
             return pd.DataFrame(copy.deepcopy(new_np_trajectory), columns=['X', 'Y', 'Z', 'time', 'trace'])
-            #return new_np_trajectory
-    
     
     def fill_missings_by_nans(self, result_df, period):
         new_np_trajectory=[]
@@ -42,8 +39,6 @@ class TimeSeriesPreparing:
                 new_np_trajectory.append((np.nan, np.nan, np.nan, (new_np_trajectory[i-1][3]+period), result_df[i][4] ))
                 new_np_trajectory.append(result_df[i])
         
-        
-        #return new_np_trajectory
         return pd.DataFrame(copy.deepcopy(new_np_trajectory), columns=['X', 'Y', 'Z', 'time', 'trace'])
         
     def coords_to_vectors(self, result_df):
@@ -55,7 +50,6 @@ class TimeSeriesPreparing:
                 else:
                     new_np_trajectory.append( (np.nan, np.nan, np.nan, result_df[i][3], result_df[i-1][4]))
         return pd.DataFrame(copy.deepcopy(new_np_trajectory), columns=['X', 'Y', 'Z', 'time', 'trace'])
-        #return new_np_trajectory
         
     def imputation_timeseries(self, result_df, choice):
     
